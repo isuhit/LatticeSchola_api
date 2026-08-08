@@ -1,0 +1,19 @@
+# Dependency folders
+node_modules/
+
+# Environment / Secret variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
