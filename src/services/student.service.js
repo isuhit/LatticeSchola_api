@@ -1,4 +1,5 @@
 const Student = require("../models/student.model");
+const AppError = require("../utils/app-error");
 
 const createStudent = async (studentData) => {
   const existingRegNo = await Student.findOne({
@@ -6,7 +7,7 @@ const createStudent = async (studentData) => {
   });
 
   if (existingRegNo) {
-    throw new Error("Registration number already exists");
+    throw new AppError("Registration number already exists", 409);
   }
 
   const existingEmail = await Student.findOne({
@@ -14,7 +15,7 @@ const createStudent = async (studentData) => {
   });
 
   if (existingEmail) {
-    throw new Error("Email already exists");
+    throw new AppError("Email already exists", 409);
   }
 
   // TODO: Verify department exists once Department module is implemented
@@ -35,7 +36,7 @@ const getAllStudents = async () => {
 const getStudentById = async (studentId) => {
   const student = await Student.findById(studentId);
   if (!student) {
-    throw new Error("Student not found");
+    throw new AppError("Student not found", 404);
   }
   return student;
 };
@@ -46,7 +47,7 @@ const updateStudent = async (studentId, studentData) => {
     runValidators: true,
   });
   if (!student) {
-    throw new Error("Student not found");
+    throw new AppError("Student not found", 404);
   }
   return student;
 };
@@ -54,9 +55,15 @@ const updateStudent = async (studentId, studentData) => {
 const deleteStudent = async (studentId) => {
   const student = await Student.findByIdAndDelete(studentId);
   if (!student) {
-    throw new Error("Student not found");
+    throw new AppError("Student not found", 404);
   }
   return student;
 };
 
-module.exports = { createStudent, getAllStudents, getStudentById, updateStudent, deleteStudent };
+module.exports = {
+  createStudent,
+  getAllStudents,
+  getStudentById,
+  updateStudent,
+  deleteStudent,
+};

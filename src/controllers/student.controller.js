@@ -1,68 +1,49 @@
 const studentService = require("../services/student.service");
+const asyncHandler = require("../utils/async-handler");
 
-const createStudent = async (req, res) => {
-  try {
-    const studentData = req.body;
-    const student = await studentService.createStudent(studentData);
-    res.status(201).json({
-      success: true,
-      message: "Student created successfully",
-      data: student,
-    });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
+const createStudent = asyncHandler(async (req, res) => {
+  const studentData = req.body;
+  const student = await studentService.createStudent(studentData);
+  res.status(201).json({
+    success: true,
+    message: "Student created successfully",
+    data: student,
+  });
+});
 
-const getAllStudents = async (req, res) => {
-  try {
-    const students = await studentService.getAllStudents();
-    res.status(200).json({
-      success: true,
-      message: "Students retrieved successfully",
-      data: students,
-    });
-  } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
+const getAllStudents = asyncHandler(async (req, res) => {
+  const students = await studentService.getAllStudents();
+  res.status(200).json({
+    success: true,
+    message: "Students retrieved successfully",
+    data: students,
+  });
+});
 
-const getStudentById = async (req, res) => {
-  try {
-    const studentId = req.params.id;
-    const student = await studentService.getStudentById(studentId);
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Student retrieved successfully",
-        data: student,
-      });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
+const getStudentById = asyncHandler(async (req, res) => {
+  const studentId = req.params.id;
+  const student = await studentService.getStudentById(studentId);
+  res.status(200).json({
+    success: true,
+    message: "Student retrieved successfully",
+    data: student,
+  });
+});
 
-const updateStudent = async (req, res) => {
-  try {
-    const studentId = req.params.id;
-    const studentData = req.body;
-    const student = await studentService.updateStudent(studentId, studentData);
+const updateStudent = asyncHandler(async (req, res) => {
+  const studentId = req.params.id;
+  const studentData = req.body;
+  const student = await studentService.updateStudent(studentId, studentData);
 
-    return res.status(200).json({
-      success: true,
-      message: "Student updated successfully",
-      data: student,
-    });
-  } catch (err) {
-    console.log(err.message);
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
+  return res.status(200).json({
+    success: true,
+    message: "Student updated successfully",
+    data: student,
+  });
+});
 
-const deleteStudent = async (req, res) => {
-  try {
+const deleteStudent =asyncHandler( async (req, res) => {
+  
     const studentId = req.params.id;
     const student = await studentService.deleteStudent(studentId);
 
@@ -71,10 +52,7 @@ const deleteStudent = async (req, res) => {
       message: "Student deleted successfully",
       data: student,
     });
-  } catch (err) {
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
+});
 
 module.exports = {
   createStudent,
