@@ -36,11 +36,18 @@ const StudentSchema = new Schema(
     //   ref: "Department",
     //   required: [true, "Department is required"],
     // },
+    courses: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Course",
+        required: [true, "Course is required"],
+      },
+    ],
     level: {
       type: Number,
       required: [true, "Level is required"],
       enum: [100, 200, 300, 400],
-      default: 100
+      default: 100,
     },
 
     status: {

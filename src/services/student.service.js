@@ -1,4 +1,5 @@
 const Student = require("../models/student.model");
+const Course = require("../models/course.model");
 const AppError = require("../utils/app-error");
 
 const createStudent = async (studentData) => {
@@ -27,7 +28,7 @@ const createStudent = async (studentData) => {
 const getAllStudents = async () => {
   const students = await Student.find(
     {},
-    { firstName: 1, lastName: 1, email: 1, _id: 1 },
+    { firstName:1, lastName: 1, email: 1 },
   );
 
   return students;
@@ -60,10 +61,48 @@ const deleteStudent = async (studentId) => {
   return student;
 };
 
+const assignCourseToStudent = async (studentId, courseId) => {
+  const student = await Student.findById(studentId);
+  const course = await Course.findById(courseId);
+
+  //Ensure student exists
+  if (!student) {
+    throw new AppError("Student does not exist", 404);
+  }
+  //Ensure Course exists
+  if (!course) {
+    throw new AppError("Course does not exist", 404);
+  }
+
+  // Ensure Course is not already assigned
+  const courseAssigned = student.courses.some((courseId) =>
+    courseId.equals(course._id),
+  );
+  if (courseAssigned) {
+    throw new AppError("Course already Exist", 409);
+  }
+
+  student.courses.push(course._id);
+  await student.save();
+  return student;
+};
+
+const getStudentCourses = async (studentId) => {
+  const student = await Student.findById(studentId);
+  if (!student) {
+    throw new AppError("Student does not exist", 404);
+  }
+  await student.populate("courses");
+
+  return student;
+};
+
 module.exports = {
   createStudent,
   getAllStudents,
   getStudentById,
   updateStudent,
   deleteStudent,
+  assignCourseToStudent,
+  getStudentCourses,
 };
