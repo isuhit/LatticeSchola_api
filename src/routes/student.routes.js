@@ -4,15 +4,16 @@ const { validate } = require("../middlewares/validate.middleware");
 const {
   createStudentSchema,
   updateStudentSchema,
+  studentQuerySchema
 } = require("../validators/student.validators");
 
 Router.route("/")
-  .get(studentController.getAllStudents)
-  .post(validate(createStudentSchema), studentController.createStudent);
+  .get(validate(studentQuerySchema, "query"), studentController.getAllStudents)
+  .post(validate(createStudentSchema, "body"), studentController.createStudent);
 
 Router.route("/:id")
   .get(studentController.getStudentById)
-  .put(validate(updateStudentSchema), studentController.updateStudent)
+  .put(validate(updateStudentSchema, "body"), studentController.updateStudent)
   .delete(studentController.deleteStudent);
 module.exports = Router;
 
@@ -20,4 +21,4 @@ Router.post(
   "/:studentId/course/:courseId",
   studentController.assignCourseToStudent,
 );
-Router.post("/:studentId/courses", studentController.getStudentCourses);
+Router.get("/:studentId/courses", studentController.getStudentCourses);

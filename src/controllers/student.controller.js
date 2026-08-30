@@ -12,11 +12,17 @@ const createStudent = asyncHandler(async (req, res) => {
 });
 
 const getAllStudents = asyncHandler(async (req, res) => {
-  const students = await studentService.getAllStudents();
+  queryParams = req.validQuery;
+  const students = await studentService.getAllStudents(queryParams);
   res.status(200).json({
+    page: students.page,
+    pages: students.pages,
+    limit: students.limit,
+    size: students.size,
     success: true,
+    total: students.total,
     message: "Students retrieved successfully",
-    data: students,
+    data: students.students,
   });
 });
 
@@ -74,7 +80,7 @@ const getStudentCourses = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: "Student course retrieved suceessfully",
+    message: "Student course retrieved successfully",
     data: student,
   });
 });
@@ -85,5 +91,5 @@ module.exports = {
   updateStudent,
   deleteStudent,
   assignCourseToStudent,
-  getStudentCourses
+  getStudentCourses,
 };

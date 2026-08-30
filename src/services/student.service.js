@@ -25,13 +25,36 @@ const createStudent = async (studentData) => {
   return student;
 };
 
-const getAllStudents = async () => {
-  const students = await Student.find(
-    {},
-    { firstName:1, lastName: 1, email: 1 },
-  );
+const getAllStudents = async (validQuery) => {
+  const { level, status, gender, page, limit, sort } = validQuery;
+  const skip = (page - 1) * limit;
+  const filter = {};
 
-  return students;
+  if (level) {
+    filter.level = level;
+  }
+  if (status) {
+    filter.status = status;
+  }
+  if (gender) {
+    filter.gender = gender;
+  }
+  const totalStudent = await Student.countDocuments(filter);
+  const pages = Math.ceil(totalStudent / limit);
+  const students = await Student.find(filter, "firstName lastName email level")
+    .sort(`${sort} _id`)
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  return {
+    page,
+    pages,
+    limit,
+    size: students.length,
+    students,
+    total: totalStudent,
+  };
 };
 
 const getStudentById = async (studentId) => {
@@ -79,7 +102,7 @@ const assignCourseToStudent = async (studentId, courseId) => {
     courseId.equals(course._id),
   );
   if (courseAssigned) {
-    throw new AppError("Course already Exist", 409);
+    throw new AppError("Course already exists for this student", 409);
   }
 
   student.courses.push(course._id);

@@ -1,46 +1,63 @@
 # LatticeSchola API
 
-A backend REST API for managing student information, built with Node.js, Express, MongoDB, and Mongoose.
+A RESTful Student Management API built with Node.js, Express, and MongoDB.
 
-LatticeSchola is being developed as a progressive backend engineering project. The goal is not only to build working endpoints, but to apply clean architecture, validation, error handling, and scalable API design while continuously improving the system through future versions.
+The project is being developed as a practical backend engineering project, with emphasis on clean architecture, validation, error handling, relationships, and production readiness.
 
-## Current Version
+---
 
-**v1.0 — Student Management Module**
+## Current Status
 
-The current version implements complete CRUD operations for students, along with request validation, centralized error handling, and API testing.
+**Version:** v1.0 — Student Management & Course Module
+
+### Completed
+
+- Student CRUD operations
+- Request validation with Joi
+- Centralized error handling
+- Custom `AppError` class
+- Async controller handling with `asyncHandler`
+- Course management
+- Student-course relationships
+- Mongoose references and `populate()`
+- Student filtering
+- Pagination
+- Sorting
+- Postman API testing collection
+- API documentation
+
+### In Progress
+
+- Deployment
 
 ---
 
 ## Tech Stack
 
-* **Node.js** — JavaScript runtime
-* **Express.js** — Web framework
-* **MongoDB** — Database
-* **Mongoose** — MongoDB ODM
-* **Joi** — Request validation
-* **dotenv** — Environment variable management
-* **Nodemon** — Development server
+- **Node.js**
+- **Express.js**
+- **MongoDB**
+- **Mongoose**
+- **Joi**
+- **Postman**
 
 ---
 
-## Project Architecture
+## Architecture
 
 The API follows a layered architecture:
 
 ```text
-Client
-   ↓
-Express App
-   ↓
-Routes
-   ↓
-Controllers
-   ↓
-Services
-   ↓
-Models
-   ↓
+Route
+  ↓
+Middleware
+  ↓
+Controller
+  ↓
+Service
+  ↓
+Model
+  ↓
 MongoDB
 ```
 
@@ -48,32 +65,23 @@ MongoDB
 
 **Routes**
 
-* Define API endpoints.
-* Connect incoming requests to controllers.
-* Apply request validation middleware.
-
-**Controllers**
-
-* Handle HTTP requests and responses.
-* Extract data from requests.
-* Delegate business operations to services.
-
-**Services**
-
-* Contain application/business logic.
-* Communicate with Mongoose models.
-* Handle business rules such as duplicate detection.
-
-**Models**
-
-* Define database schemas.
-* Handle persistence through Mongoose.
+Define API endpoints and connect requests to the appropriate middleware and controllers.
 
 **Middleware**
 
-* Validate incoming requests.
-* Handle errors centrally.
-* Manage asynchronous controller errors.
+Handles cross-cutting request processing such as validation and error forwarding.
+
+**Controllers**
+
+Handle HTTP requests and responses. Controllers delegate business logic to services.
+
+**Services**
+
+Contain business logic and database operations.
+
+**Models**
+
+Define the structure of MongoDB documents and provide the interface for database operations through Mongoose.
 
 ---
 
@@ -82,160 +90,257 @@ MongoDB
 ```text
 src/
 ├── controllers/
-│   └── student.controller.js
-│
 ├── middleware/
-│   ├── error.middleware.js
-│   └── validate.middleware.js
-│
 ├── models/
-│   └── student.model.js
-│
 ├── routes/
-│   └── student.routes.js
-│
 ├── services/
-│   └── student.service.js
-│
-├── utils/
-│   ├── app-error.js
-│   └── async-handler.js
-│
 ├── validators/
-│   └── student.validators.js
-│
 ├── app.js
 └── server.js
+
+postman/
+└── LatticeSchola.postman_collection.json
 ```
 
 ---
 
-## Getting Started
+# Getting Started
 
-### 1. Clone the repository
+## Prerequisites
+
+Make sure you have installed:
+
+- Node.js
+- MongoDB
+- Git
+
+## Installation
+
+Clone the repository:
 
 ```bash
-git clone <your-repository-url>
-cd LatticeSchola-API
+git clone <repository-url>
 ```
 
-### 2. Install dependencies
+Navigate into the project:
+
+```bash
+cd latticeschola-api
+```
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### 3. Configure environment variables
+---
+
+## Environment Variables
 
 Create a `.env` file in the project root:
 
 ```env
-PORT=3000
 MONGO_URL=your_mongodb_connection_string
+PORT=5000
 ```
 
-Do not commit your `.env` file or expose your database credentials.
+Do not commit your `.env` file to version control.
 
-### 4. Start the development server
+---
+
+## Running the API
+
+### Development
 
 ```bash
 npm run dev
 ```
 
-The API will run on:
-
-```text
-http://localhost:3000
-```
-
-### 5. Start in production mode
+### Production
 
 ```bash
 npm start
 ```
 
+The development server uses Nodemon for automatic restarts.
+
 ---
 
-# Student API
+# API Reference
 
 Base URL:
 
 ```text
-/api/students
+/api
 ```
 
-## Endpoints
+## Student Endpoints
 
-| Method | Endpoint            | Description         |
-| ------ | ------------------- | ------------------- |
-| POST   | `/api/students`     | Create a student    |
-| GET    | `/api/students`     | Get all students    |
-| GET    | `/api/students/:id` | Get a student by ID |
-| PUT    | `/api/students/:id` | Update a student    |
-| DELETE | `/api/students/:id` | Delete a student    |
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/students` | Create a student |
+| `GET` | `/api/students` | Retrieve students |
+| `GET` | `/api/students/:id` | Retrieve a student by ID |
+| `PUT` | `/api/students/:id` | Update a student |
+| `DELETE` | `/api/students/:id` | Delete a student |
+| `POST` | `/api/students/:studentId/course/:courseId` | Assign a course to a student |
+| `GET` | `/api/students/:studentId/courses` | Retrieve a student's courses |
 
 ---
 
+# Student API
+
 ## Create Student
 
-### Request
+### `POST /api/students`
 
-```http
-POST /api/students
-```
+Creates a new student.
 
-Example request body:
+### Request Body
 
 ```json
 {
-  "registrationNumber": "REG/2024/003",
-  "firstName": "David",
-  "lastName": "Okoro",
-  "email": "david@example.com",
-  "phone": "+2348012345678",
+  "registrationNumber": "2022/CS/048",
+  "firstName": "Blessing",
+  "lastName": "Ibet",
+  "email": "blessing.ibet@student.edu.ng",
+  "phone": "+2348145678901",
   "gender": "Male",
-  "department": "YOUR_DEPARTMENT_ID",
-  "level": 200,
-  "status": "Registered"
+  "level": 300,
+  "status": "Pending"
 }
 ```
 
-### Successful Response
+### Validation
+
+- `gender`: `Male` or `Female`
+- `level`: `100`, `200`, `300`, or `400`
+- `status`: `Registered` or `Pending`
+- Required fields must satisfy the student validation schema.
+
+### Success Response
+
+**201 Created**
 
 ```json
 {
   "success": true,
   "message": "Student created successfully",
-  "data": {}
+  "data": {
+    "...": "created student"
+  }
 }
-```
-
-Returns:
-
-```text
-201 Created
 ```
 
 ---
 
-## Get All Students
+## Get Students
+
+### `GET /api/students`
+
+Retrieves students with optional filtering, pagination, and sorting.
+
+### Query Parameters
+
+| Parameter | Type | Allowed Values | Default | Description |
+|---|---|---|---|---|
+| `level` | Number | `100`, `200`, `300`, `400` | — | Filter students by level |
+| `status` | String | `Registered`, `Pending` | — | Filter students by status |
+| `gender` | String | `Male`, `Female` | — | Filter students by gender |
+| `page` | Number | Positive integer | `1` | Page number |
+| `limit` | Number | `1–100` | `20` | Number of students per page |
+| `sort` | String | `firstName`, `-createdAt` | `-createdAt` | Sort the results |
+
+Unknown query parameters are rejected.
+
+### Example Request
 
 ```http
-GET /api/students
+GET /api/students?level=300&status=Registered&page=2&limit=3&sort=firstName
 ```
 
-Returns:
+### Response Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `success` | Boolean | Indicates whether the request succeeded |
+| `message` | String | Human-readable response message |
+| `page` | Number | Current page |
+| `pages` | Number | Total number of pages |
+| `limit` | Number | Maximum number of students per page |
+| `size` | Number | Number of students returned in the current response |
+| `total` | Number | Total number of students matching the filters |
+| `data` | Array | Students returned for the current page |
+
+### Pagination
+
+The number of pages is calculated as:
 
 ```text
-200 OK
+pages = Math.ceil(total / limit)
 ```
 
-Example:
+For example:
+
+```text
+total = 37
+limit = 3
+
+pages = 13
+```
+
+`total` represents all matching students, while `size` represents the number of students returned in the current response.
+
+### Example Response
+
+**200 OK**
 
 ```json
 {
   "success": true,
   "message": "Students retrieved successfully",
+  "page": 2,
+  "pages": 13,
+  "limit": 3,
+  "size": 3,
+  "total": 37,
+  "data": [
+    {
+      "firstName": "Blessing",
+      "lastName": "Ibet",
+      "email": "blessing.ibet@student.edu.ng",
+      "level": 300
+    },
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com",
+      "level": 300
+    },
+    {
+      "firstName": "Mary",
+      "lastName": "James",
+      "email": "mary@example.com",
+      "level": 300
+    }
+  ]
+}
+```
+
+### Empty Results
+
+A valid query that matches no students does not produce an error.
+
+```json
+{
+  "success": true,
+  "message": "Students retrieved successfully",
+  "page": 1,
+  "pages": 0,
+  "limit": 20,
+  "size": 0,
+  "total": 0,
   "data": []
 }
 ```
@@ -244,120 +349,40 @@ Example:
 
 ## Get Student by ID
 
-```http
-GET /api/students/:id
-```
+### `GET /api/students/:id`
 
-Returns:
+Retrieves a single student by MongoDB ID.
 
-```text
-200 OK
-```
+### Success Response
 
-If the student does not exist:
-
-```text
-404 Not Found
-```
-
----
-
-## Update Student
-
-```http
-PUT /api/students/:id
-```
-
-Only supplied fields are updated.
-
-Example:
-
-```json
-{
-  "email": "updated@example.com"
-}
-```
-
-Returns:
-
-```text
-200 OK
-```
-
-Request validation is applied to supplied fields.
-
----
-
-## Delete Student
-
-```http
-DELETE /api/students/:id
-```
-
-Returns:
-
-```text
-200 OK
-```
-
-Example:
+**200 OK**
 
 ```json
 {
   "success": true,
-  "message": "Student deleted successfully",
-  "data": {}
+  "message": "Student retrieved successfully",
+  "data": {
+    "...": "student"
+  }
 }
 ```
 
----
+### Possible Errors
 
-# Validation
+**400 Bad Request**
 
-The API uses **Joi** for request-level validation.
+Returned when the supplied ID has an invalid format.
 
-Validation is applied before requests reach the controller.
-
-```text
-Request
-   ↓
-Validation
-   ↓
-Controller
-   ↓
-Service
-   ↓
-Database
+```json
+{
+  "success": false,
+  "message": "Invalid ID format"
+}
 ```
 
-Invalid requests are rejected with a `400 Bad Request` response.
+**404 Not Found**
 
-Examples include:
-
-* Missing required fields
-* Invalid email addresses
-* Invalid gender values
-* Invalid student levels
-* Invalid update values
-
----
-
-# Error Handling
-
-The API uses centralized error handling.
-
-Application errors can provide specific HTTP status codes:
-
-| Situation                     | Status |
-| ----------------------------- | -----: |
-| Invalid request data          |    400 |
-| Invalid MongoDB ObjectId      |    400 |
-| Student not found             |    404 |
-| Duplicate email               |    409 |
-| Duplicate registration number |    409 |
-| Unexpected server error       |    500 |
-
-Example:
+Returned when the ID is valid but the student does not exist.
 
 ```json
 {
@@ -368,108 +393,369 @@ Example:
 
 ---
 
+## Update Student
+
+### `PUT /api/students/:id`
+
+Updates an existing student.
+
+The request body is validated before reaching the service layer.
+
+### Success Response
+
+**200 OK**
+
+```json
+{
+  "success": true,
+  "message": "Student updated successfully",
+  "data": {
+    "...": "updated student"
+  }
+}
+```
+
+### Possible Errors
+
+**400 Bad Request**
+
+- Invalid student ID format
+- Invalid request body
+
+**404 Not Found**
+
+The student does not exist.
+
+---
+
+## Delete Student
+
+### `DELETE /api/students/:id`
+
+Deletes an existing student.
+
+### Success Response
+
+**200 OK**
+
+```json
+{
+  "success": true,
+  "message": "Student deleted successfully",
+  "data": {
+    "...": "deleted student"
+  }
+}
+```
+
+### Possible Errors
+
+**400 Bad Request**
+
+```json
+{
+  "success": false,
+  "message": "Invalid ID format"
+}
+```
+
+**404 Not Found**
+
+```json
+{
+  "success": false,
+  "message": "Student not found"
+}
+```
+
+---
+
+# Course & Student Relationships
+
+## Assign Course to Student
+
+### `POST /api/students/:studentId/course/:courseId`
+
+Assigns an existing course to a student.
+
+### Success Response
+
+**200 OK**
+
+```json
+{
+  "success": true,
+  "message": "Course assigned successfully",
+  "data": {
+    "...": "updated student"
+  }
+}
+```
+
+### Possible Errors
+
+**400 Bad Request**
+
+Returned for an invalid student or course ID format.
+
+```json
+{
+  "success": false,
+  "message": "Invalid ID format"
+}
+```
+
+**404 Not Found**
+
+Returned when the student or course does not exist.
+
+```json
+{
+  "success": false,
+  "message": "Student not found"
+}
+```
+
+or:
+
+```json
+{
+  "success": false,
+  "message": "Course does not exist"
+}
+```
+
+**409 Conflict**
+
+Returned when the course has already been assigned to the student.
+
+```json
+{
+  "success": false,
+  "message": "Course already exists for this student"
+}
+```
+
+---
+
+## Get Student Courses
+
+### `GET /api/students/:studentId/courses`
+
+Retrieves a student's courses.
+
+Courses are populated from their referenced Course documents.
+
+### Success Response
+
+**200 OK**
+
+```json
+{
+  "success": true,
+  "message": "Student courses retrieved successfully",
+  "data": {
+    "_id": "student-id",
+    "registrationNumber": "2022/CS/048",
+    "firstName": "Blessing",
+    "lastName": "Ibet",
+    "email": "blessing.ibet@student.edu.ng",
+    "courses": [
+      {
+        "_id": "course-id",
+        "title": "Introduction to Information Systems",
+        "code": "INF121",
+        "description": "Introduction to information systems",
+        "creditUnit": 3,
+        "lecturer": "Dr. John Doe"
+      }
+    ],
+    "level": 300,
+    "status": "Pending"
+  }
+}
+```
+
+### Possible Errors
+
+**400 Bad Request**
+
+Invalid student ID format.
+
+**404 Not Found**
+
+The student does not exist.
+
+---
+
+# Validation
+
+Request validation is handled using Joi.
+
+Validation is performed at the request boundary before data reaches the service layer.
+
+For query parameters:
+
+```text
+Client Request
+      ↓
+Joi Validation
+      ↓
+req.validQuery
+      ↓
+Controller
+      ↓
+Service
+```
+
+Unknown query parameters are rejected.
+
+For request bodies, validated values are assigned back to the request body before reaching the controller.
+
+---
+
+# Error Handling
+
+The API uses a centralized error-handling system.
+
+## AppError
+
+`AppError` is a custom error class used to create application-level errors with a status code and message.
+
+Example:
+
+```js
+throw new AppError("Student not found", 404);
+```
+
+The centralized error middleware converts these errors into structured HTTP responses.
+
+## AsyncHandler
+
+Controllers use `asyncHandler` to forward asynchronous errors to the centralized error middleware without repetitive `try/catch` blocks.
+
+```text
+Async Controller
+      ↓
+asyncHandler
+      ↓
+Error Middleware
+      ↓
+Structured Response
+```
+
+## Common Status Codes
+
+| Status | Meaning |
+|---|---|
+| `200` | Successful request |
+| `201` | Resource successfully created |
+| `400` | Invalid request or validation failure |
+| `404` | Requested resource does not exist |
+| `409` | Request conflicts with existing data |
+| `500` | Unexpected server error |
+
+---
+
 # Testing
 
-The Student API has been tested using Postman.
+The API is tested using Postman.
 
-The test coverage currently includes:
+The Postman collection is included in:
 
-* Successful student creation
-* Duplicate email handling
-* Student retrieval
-* Student retrieval by ID
-* Nonexistent student handling
-* Invalid ObjectId handling
-* Successful student updates
-* Invalid update data
-* Student deletion
-* Verification that deleted students can no longer be retrieved
+```text
+postman/
+└── LatticeSchola.postman_collection.json
+```
+
+The collection covers:
+
+- Student CRUD operations
+- Student filtering
+- Pagination
+- Sorting
+- Course assignment
+- Student course retrieval
+- Request validation
+- Invalid ID formats
+- Resource-not-found scenarios
+- Duplicate course assignment
 
 ---
 
 # Development Scripts
 
-### Development
-
 ```bash
 npm run dev
 ```
 
-Runs the API using Nodemon.
-
-### Production
+Starts the development server using Nodemon.
 
 ```bash
 npm start
 ```
 
-Runs the API using Node.js.
+Starts the API using Node.js.
+
+The current `npm test` script is the default placeholder and is not currently used for API testing. API testing is currently performed through Postman.
 
 ---
 
 # Roadmap
 
-LatticeSchola is being developed incrementally.
+## Current — Production Readiness
 
-### v1.0 — Student Management
+- [x] Student CRUD
+- [x] Request validation
+- [x] Centralized error handling
+- [x] Course model
+- [x] Student-course relationships
+- [x] Mongoose population
+- [x] Filtering
+- [x] Pagination
+- [x] Sorting
+- [x] Postman collection
+- [x] API documentation
+- [ ] Deployment
 
-* [x] Project setup
-* [x] Express server
-* [x] MongoDB connection
-* [x] Student model
-* [x] Create student
-* [x] Get students
-* [x] Get student by ID
-* [x] Update student
-* [x] Delete student
-* [x] Request validation
-* [x] Centralized error handling
-* [x] Postman testing
+## Future Improvements
 
-### v1.x — Improvements
+Potential future improvements may include:
 
-* [ ] Search
-* [ ] Pagination
-* [ ] Sorting
-* [ ] Improved API documentation
-* [ ] Deployment
-
-### v2.0 — Courses & Relationships
-
-* [ ] Course model
-* [ ] Department model
-* [ ] Student-course relationships
-* [ ] MongoDB references
-* [ ] Mongoose `populate()`
-* [ ] Course management endpoints
-
-Future versions will expand the system into a more complete student management platform.
+- Database indexes
+- More advanced filtering and sorting
+- Automated tests
+- Improved API observability
+- Authentication and authorization
+- Rate limiting
+- Additional production optimizations
 
 ---
 
-## Learning Goals
+# Learning Goals
 
-This project is also a practical backend engineering learning journey.
+This project is being used to develop practical backend engineering skills through progressive implementation.
 
-Key concepts being developed include:
+Key concepts covered include:
 
-* REST API design
-* Express.js
-* MongoDB and Mongoose
-* Layered architecture
-* Separation of concerns
-* Service-oriented thinking
-* Request validation
-* Error handling
-* Async JavaScript
-* API testing
-* Git and GitHub
-* Production-oriented backend practices
+- REST API design
+- Layered architecture
+- Middleware
+- Request validation
+- Error handling
+- MongoDB and Mongoose
+- Database relationships
+- ObjectId references
+- Mongoose `populate()`
+- Filtering
+- Pagination
+- Sorting
+- API documentation
+- API testing
+- Deployment
 
 ---
 
-## Author
+# License
 
-**Isuho Friday**
-
-Backend Developer in training, focused on building practical backend systems with Node.js and continuously improving software engineering fundamentals.
+This project is currently for educational and development purposes.

@@ -23,9 +23,22 @@ const updateStudentSchema = joi.object({
   gender: joi.string().valid("Male", "Female"),
   level: joi.number().valid(100, 200, 300, 400),
   status: joi.string().valid("Registered", "Pending"),
-});
+}).unknown(false);
+
+const studentQuerySchema = joi.object({
+  //filtering
+  gender: joi.string().trim().valid("Male", "Female"),
+  status: joi.string().valid("Registered", "Pending"),
+  level: joi.number().valid(100, 200, 300, 400),
+
+  //Pagination
+  limit: joi.number().integer().min(1).max(100).default(20),
+  page: joi.number().integer().min(1).default(1),
+  sort: joi.string().valid("firstName", "-createdAt").default("-createdAt")
+}).unknown(false)
 
 module.exports = {
   createStudentSchema,
   updateStudentSchema,
+  studentQuerySchema
 };
