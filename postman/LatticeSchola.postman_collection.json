@@ -1,0 +1,434 @@
+{
+  "info": {
+    "_postman_id": "7feeee2f-3625-4e2b-be98-49a0c12dbe30",
+    "name": "LatticeSchola",
+    "description": "## LatticeSchola API\n\nLatticeSchola is a RESTful API for managing an educational platform. It provides endpoints to handle the core entities of a learning system — **Students**, **Courses**, and the **Relationships** between them.\n\n### Resources\n\n**Students**\nManage the full lifecycle of student records:\n- Create a new student\n- Retrieve all students or a specific student by ID\n- Update a student's details\n- Delete a student\n\n**Courses**\nManage course catalog operations:\n- Create a new course\n- Retrieve all courses or a specific course by ID\n- Update course details\n- Delete a course\n\n**Relationships**\nHandle student–course associations:\n- Assign a course to a student\n- Retrieve all courses enrolled by a specific student\n\n### Base URL\n`http://localhost:3000/api`",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49826122",
+    "_collection_link": "https://go.postman.co/collection/49826122-7feeee2f-3625-4e2b-be98-49a0c12dbe30?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Student",
+      "item": [
+        {
+          "name": "Create Student",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"registrationNumber\": \"REG/2024/001\",\n  \"firstName\": \"Chinedu\",\n  \"lastName\": \"Okonkwo\",\n  \"email\": \"chinedu.okonkwo@example.com\",\n  \"phone\": \"+2348012345678\",\n  \"gender\": \"Male\",\n  \"level\": 200,\n  \"status\": \"Registered\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/students",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "students"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Students",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/students",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "students"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Student By Id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/students/6a7569a067b4216497813b27",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "students",
+                "6a7569a067b4216497813b27"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Student By Id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"phone\":\"+2338011223395\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/students/6a7569a067b4216497813b27",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "students",
+                "6a7569a067b4216497813b27"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete student",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/students/6a74f19f5a03f391aa4df66b",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "students",
+                "6a74f19f5a03f391aa4df66b"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Course",
+      "item": [
+        {
+          "name": "Get All Courses",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/courses",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "courses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course By ID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/courses/6a7eb84dbc69ea1f6b7d5e53",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "courses",
+                "6a7eb84dbc69ea1f6b7d5e53"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Course",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Introduction to Information Systems\",\r\n  \"code\": \"INF121\",\r\n  \"description\": \"Introduction to information systems\",\r\n  \"creditUnit\": 3,\r\n  \"lecturer\": \"Dr. John Doe\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/courses",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "courses"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Course",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Introduction to Information Systems\",\r\n  \"code\": \"INF125\",\r\n  \"description\": \"Introduction to information systems\",\r\n  \"creditUnit\": 4,\r\n  \"lecturer\": \"Dr. Intest Doe\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/courses/6a7ec04d3fd2909975c17661",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "courses",
+                "6a7ec04d3fd2909975c17661"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a Course",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"creditUnit\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/courses/6a867b0e86a1ec6d1ba9c75c",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "courses",
+                "6a867b0e86a1ec6d1ba9c75c"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Relationship",
+      "item": [
+        {
+          "name": "Assign Course to Student",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/students/6a7569a067b4216497813b27/course/6a7eb84dbc69ea1f6b7d5e53",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "students",
+                "6a7569a067b4216497813b27",
+                "course",
+                "6a7eb84dbc69ea1f6b7d5e53"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Student With Courses",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/students/6a7569a067b4216497813b27/courses",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "students",
+                "6a7569a067b4216497813b27",
+                "courses"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
